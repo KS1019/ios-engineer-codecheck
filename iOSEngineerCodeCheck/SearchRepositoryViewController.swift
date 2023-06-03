@@ -4,7 +4,7 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var repositories: [[String: Any]]=[]
+    var repositories: [[String: Any]] = []
     
     var urlSessionTask: URLSessionTask?
     var index: Int!
