@@ -1,14 +1,13 @@
 import UIKit
 
 class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate {
-    
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var repositories: [[String: Any]] = []
+    var repositories: [Repository] = []
     
     var urlSessionTask: URLSessionTask?
     var index: Int!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.text = "GitHubのリポジトリを検索できるよー"
@@ -30,11 +29,14 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
         
         if searchWord.count != 0 {
             guard let url = URL(string: "https://api.github.com/search/repositories?q=\(searchWord)") else { return }
+            let decoder = JSONDecoder()
+
             urlSessionTask = URLSession.shared.dataTask(with: url) { (data, res, err) in
                 guard let data = data,
-                      let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                      let items = obj["items"] as? [[String: Any]]  else { return }
-                self.repositories = items
+                      let result = try? decoder.decode(RepoSearchResultItem.self, from: data) else { return }
+                print(data)
+                print(result)
+                self.repositories = result.items
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -61,8 +63,8 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         let repository = repositories[indexPath.row]
-        cell.textLabel?.text = repository["full_name"] as? String ?? ""
-        cell.detailTextLabel?.text = repository["language"] as? String ?? ""
+        cell.textLabel?.text = repository.fullName
+        cell.detailTextLabel?.text = repository.language
         cell.tag = indexPath.row
 
         return cell
