@@ -7,8 +7,6 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     var repositories: [[String: Any]]=[]
     
     var urlSessionTask: URLSessionTask?
-    var searchWord: String!
-    var url: String!
     var index: Int!
     
     override func viewDidLoad() {
@@ -28,13 +26,13 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        searchWord = searchBar.text!
+        guard let searchWord = searchBar.text else { return }
         
         if searchWord.count != 0 {
-            url = "https://api.github.com/search/repositories?q=\(searchWord!)"
-            urlSessionTask = URLSession.shared.dataTask(with: URL(string: url)!) { (data, res, err) in
-                if let obj = try! JSONSerialization.jsonObject(with: data!) as? [String: Any] {
+            guard let url = URL(string: "https://api.github.com/search/repositories?q=\(searchWord)") else { return }
+            urlSessionTask = URLSession.shared.dataTask(with: url) { (data, res, err) in
+                guard let data = data else { return }
+                if let obj = try! JSONSerialization.jsonObject(with: data) as? [String: Any] {
                     if let items = obj["items"] as? [[String: Any]] {
                         self.repositories = items
                         DispatchQueue.main.async {
@@ -52,7 +50,7 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     /// 画面遷移直前に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Detail" {
-            let dtl = segue.destination as! RepositoryDetailViewController
+            guard let dtl = segue.destination as? RepositoryDetailViewController else { return }
             dtl.searchRepositoryVC = self
         }
     }
