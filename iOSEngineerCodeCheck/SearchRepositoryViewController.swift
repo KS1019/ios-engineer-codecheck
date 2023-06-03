@@ -50,8 +50,8 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     /// 画面遷移直前に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Detail" {
-            guard let dtl = segue.destination as? RepositoryDetailViewController else { return }
-            dtl.searchRepositoryVC = self
+            guard let repositoryDetailVC = segue.destination as? RepositoryDetailViewController else { return }
+            repositoryDetailVC.searchRepositoryVC = self
         }
     }
 
