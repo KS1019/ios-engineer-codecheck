@@ -28,21 +28,19 @@ class RepositoryDetailViewController: UIViewController {
     }
 
     /// アバター画像を設定する
-    func setOwnerAvatar(){
+    func setOwnerAvatar() {
         let repo = searchRepositoryVC.repositories[searchRepositoryVC.index]
         
         titleLabel.text = repo["full_name"] as? String
         
-        if let owner = repo["owner"] as? [String: Any] {
-            if let avatarURLStr = owner["avatar_url"] as? String, let avatarURL = URL(string: avatarURLStr) {
-                URLSession.shared.dataTask(with: avatarURL) { (data, res, err) in
-                    guard let data =  data, let img = UIImage(data: data) else { return }
-                    DispatchQueue.main.async {
-                        self.imageView.image = img
-                    }
-                }.resume()
+        guard let owner = repo["owner"] as? [String: Any],
+              let avatarURLStr = owner["avatar_url"] as? String,
+              let avatarURL = URL(string: avatarURLStr) else { return }
+        URLSession.shared.dataTask(with: avatarURL) { (data, res, err) in
+            guard let data =  data, let img = UIImage(data: data) else { return }
+            DispatchQueue.main.async {
+                self.imageView.image = img
             }
-        }
-        
+        }.resume()
     }
 }

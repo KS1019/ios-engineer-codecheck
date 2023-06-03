@@ -31,20 +31,17 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
         if searchWord.count != 0 {
             guard let url = URL(string: "https://api.github.com/search/repositories?q=\(searchWord)") else { return }
             urlSessionTask = URLSession.shared.dataTask(with: url) { (data, res, err) in
-                guard let data = data else { return }
-                if let obj = try! JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                    if let items = obj["items"] as? [[String: Any]] {
-                        self.repositories = items
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    }
+                guard let data = data,
+                      let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                      let items = obj["items"] as? [[String: Any]]  else { return }
+                self.repositories = items
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
                 }
             }
-            // タスクの再開（テーブルビューを更新する）
-            urlSessionTask?.resume()
         }
-        
+        // タスクの再開（テーブルビューを更新する）
+        urlSessionTask?.resume()
     }
 
     /// 画面遷移直前に呼ばれる
