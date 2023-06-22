@@ -5,7 +5,7 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
 
     private var repositories: [Repository] = []
     private var urlSessionTask: URLSessionTask?
-    public var index: Int!
+    private var index: Int!
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -2,7 +2,6 @@ import UIKit
 
 class RepositoryDetailViewController: UIViewController {
     @IBOutlet weak private var imageView: UIImageView!
-
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var languageLabel: UILabel!
     @IBOutlet weak private var starsLabel: UILabel!
