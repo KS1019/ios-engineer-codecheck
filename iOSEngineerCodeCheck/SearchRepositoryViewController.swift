@@ -37,7 +37,9 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
                       let result = try? decoder.decode(RepoSearchResultItem.self, from: data) else { return }
                 self.repositories = result.items
                 DispatchQueue.main.async {
+                    print("ggggg")
                     self.tableView.reloadData()
+                    print("ffff")
                 }
             }
             // タスクの再開（テーブルビューを更新する）
@@ -49,7 +51,7 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Detail" {
             guard let repositoryDetailVC = segue.destination as? RepositoryDetailViewController else { return }
-            repositoryDetailVC.searchRepositoryVC = self
+            repositoryDetailVC.repo = repositories[index]
         }
     }
 
@@ -60,12 +62,11 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
 
     /// Cellの生成
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Repository") as? RepositoryCell else { fatalError() }
         let repository = repositories[indexPath.row]
-        cell.textLabel!.text = repository.fullName
-        cell.detailTextLabel?.text = repository.language
+        cell.titleLabel.text = repository.fullName
+        cell.detailLabel.text = repository.language ?? ""
         cell.tag = indexPath.row
-
         return cell
     }
 
@@ -74,4 +75,9 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
         index = indexPath.row
         performSegue(withIdentifier: "Detail", sender: self)
     }
+}
+
+class RepositoryCell: UITableViewCell {
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var detailLabel: UILabel!
 }
