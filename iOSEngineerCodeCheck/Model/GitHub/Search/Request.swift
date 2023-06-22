@@ -25,10 +25,10 @@ public struct GitHubAPI {
         .resume()
     }
 
-    enum GitHubAPIError: LocalizedError {
+    public enum GitHubAPIError: LocalizedError, Equatable {
         case searchWordTooShort
         case cannotFormURL(invalidURL: String)
-        var errorDescription: String? {
+        public var errorDescription: String? {
             switch self {
                 case .searchWordTooShort:
                     return "Search word is too short"

@@ -109,6 +109,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		7CDBC5612A44EE25006FA0DB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7CBB336A2A2AF56E0047421A /* GitHub */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		BFD945D2244DC5E80012785A = {
 			isa = PBXGroup;
 			children = (
@@ -135,7 +143,7 @@
 				BFD945DE244DC5E80012785A /* AppDelegate.swift */,
 				BFD945E0244DC5E80012785A /* SceneDelegate.swift */,
 				7CDBC5602A44E2B1006FA0DB /* View */,
-				7CBB336A2A2AF56E0047421A /* GitHub */,
+				7CDBC5612A44EE25006FA0DB /* Model */,
 				BFD945E7244DC5EB0012785A /* Assets.xcassets */,
 				BFD945E9244DC5EB0012785A /* LaunchScreen.storyboard */,
 				BFD945EC244DC5EB0012785A /* Info.plist */,
