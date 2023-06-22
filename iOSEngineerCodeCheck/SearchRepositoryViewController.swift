@@ -35,8 +35,6 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
             urlSessionTask = URLSession.shared.dataTask(with: url) { (data, res, err) in
                 guard let data = data,
                       let result = try? decoder.decode(RepoSearchResultItem.self, from: data) else { return }
-                print(data)
-                print(result)
                 self.repositories = result.items
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
