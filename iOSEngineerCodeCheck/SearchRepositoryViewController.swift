@@ -1,11 +1,11 @@
 import UIKit
 
 class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate {
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak private var searchBar: UISearchBar!
 
-    var repositories: [Repository] = []
-    var urlSessionTask: URLSessionTask?
-    var index: Int!
+    private var repositories: [Repository] = []
+    private var urlSessionTask: URLSessionTask?
+    public var index: Int!
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -1,7 +1,7 @@
 import Foundation
 import UIKit.UIImage
 
-struct GitHubAPI {
+public struct GitHubAPI {
     static func searchRepositories(for searchWord: String, completion: @escaping (_ repositories: [Repository]) -> Void) -> Result<URLSessionDataTask, GitHubAPIError> {
         guard searchWord.count > 0 else { return .failure(.searchWordTooShort) }
         guard let url = URL(string: "https://api.github.com/search/repositories?q=\(searchWord)") else { return .failure(.cannotFormURL(invalidURL: "https://api.github.com/search/repositories?q=\(searchWord)")) }
