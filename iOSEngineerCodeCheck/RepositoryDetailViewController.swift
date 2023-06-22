@@ -16,25 +16,25 @@ class RepositoryDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        prepareLabels()
+        setOwnerAvatar()
+    }
 
+    func prepareLabels() {
         languageLabel.text = repo.language != nil ? "Written in \(repo.language!)" : ""
         starsLabel.text = "\(repo.stargazersCount) stars"
         watchesLabel.text = "\(repo.watchersCount) watchers"
         forksLabel.text = "\(repo.forksCount) forks"
         issuesLabel.text = "\(repo.openIssuesCount) open issues"
-        setOwnerAvatar()
+        titleLabel.text = repo.fullName
     }
 
     /// アバター画像を設定する
     func setOwnerAvatar() {
-        titleLabel.text = repo.fullName
-        
-        guard let avatarURL = URL(string: repo.owner.avatarURL) else { return }
-        URLSession.shared.dataTask(with: avatarURL) { (data, res, err) in
-            guard let data =  data, let img = UIImage(data: data) else { return }
+        GitHubAPI.getAvatarImage(for: repo) { image in
             DispatchQueue.main.async {
-                self.imageView.image = img
+                self.imageView.image = image
             }
-        }.resume()
+        }
     }
 }
