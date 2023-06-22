@@ -21,7 +21,8 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        urlSessionTask?.cancel()
+        guard let urlSessionTask = urlSessionTask else { return }
+        urlSessionTask.cancel()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -41,9 +42,9 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
                     self.tableView.reloadData()
                 }
             }
+            // タスクの再開（テーブルビューを更新する）
+            urlSessionTask!.resume()
         }
-        // タスクの再開（テーブルビューを更新する）
-        urlSessionTask?.resume()
     }
 
     /// 画面遷移直前に呼ばれる
@@ -63,7 +64,7 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         let repository = repositories[indexPath.row]
-        cell.textLabel?.text = repository.fullName
+        cell.textLabel!.text = repository.fullName
         cell.detailTextLabel?.text = repository.language
         cell.tag = indexPath.row
 
