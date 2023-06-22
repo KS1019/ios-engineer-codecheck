@@ -19,31 +19,26 @@ class RepositoryDetailViewController: UIViewController {
         
         let repo = searchRepositoryVC.repositories[searchRepositoryVC.index]
         
-        languageLabel.text = "Written in \(repo["language"] as? String ?? "")"
-        starsLabel.text = "\(repo["stargazers_count"] as? Int ?? 0) stars"
-        watchesLabel.text = "\(repo["wachers_count"] as? Int ?? 0) watchers"
-        forksLabel.text = "\(repo["forks_count"] as? Int ?? 0) forks"
-        issuesLabel.text = "\(repo["open_issues_count"] as? Int ?? 0) open issues"
+        languageLabel.text = repo.language != nil ? "Written in \(repo.language!)" : ""
+        starsLabel.text = "\(repo.stargazersCount) stars"
+        watchesLabel.text = "\(repo.watchersCount) watchers"
+        forksLabel.text = "\(repo.forksCount) forks"
+        issuesLabel.text = "\(repo.openIssuesCount) open issues"
         setOwnerAvatar()
     }
 
-    /// アバター画像を取得する
-    func setOwnerAvatar(){
-        
+    /// アバター画像を設定する
+    func setOwnerAvatar() {
         let repo = searchRepositoryVC.repositories[searchRepositoryVC.index]
         
-        titleLabel.text = repo["full_name"] as? String
+        titleLabel.text = repo.fullName
         
-        if let owner = repo["owner"] as? [String: Any] {
-            if let imgURL = owner["avatar_url"] as? String {
-                URLSession.shared.dataTask(with: URL(string: imgURL)!) { (data, res, err) in
-                    let img = UIImage(data: data!)!
-                    DispatchQueue.main.async {
-                        self.imageView.image = img
-                    }
-                }.resume()
+        guard let avatarURL = URL(string: repo.owner.avatarURL) else { return }
+        URLSession.shared.dataTask(with: avatarURL) { (data, res, err) in
+            guard let data =  data, let img = UIImage(data: data) else { return }
+            DispatchQueue.main.async {
+                self.imageView.image = img
             }
-        }
-        
+        }.resume()
     }
 }
