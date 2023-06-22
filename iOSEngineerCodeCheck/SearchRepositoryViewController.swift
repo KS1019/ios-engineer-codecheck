@@ -2,9 +2,9 @@ import UIKit
 
 class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
-    
+
     var repositories: [Repository] = []
-    
+
     var urlSessionTask: URLSessionTask?
     var index: Int!
 
@@ -13,38 +13,28 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
         searchBar.text = "GitHubのリポジトリを検索できるよー"
         searchBar.delegate = self
     }
-    
+
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         // ↓こうすれば初期のテキストを消せる
         searchBar.text = ""
         return true
     }
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let urlSessionTask = urlSessionTask else { return }
         urlSessionTask.cancel()
     }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchWord = searchBar.text else { return }
-        
-        if searchWord.count != 0 {
-            guard let url = URL(string: "https://api.github.com/search/repositories?q=\(searchWord)") else { return }
-            let decoder = JSONDecoder()
 
-            urlSessionTask = URLSession.shared.dataTask(with: url) { (data, res, err) in
-                guard let data = data,
-                      let result = try? decoder.decode(RepoSearchResultItem.self, from: data) else { return }
-                self.repositories = result.items
-                DispatchQueue.main.async {
-                    print("ggggg")
-                    self.tableView.reloadData()
-                    print("ffff")
-                }
-            }
-            // タスクの再開（テーブルビューを更新する）
-            urlSessionTask!.resume()
-        }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchWord = searchBar.text,
+              case .success(let task) = GitHubAPI.searchRepositories(for: searchWord, completion: { repositories in
+                  self.repositories = repositories
+                  DispatchQueue.main.async {
+                      self.tableView.reloadData()
+                  }
+              }) else { return }
+        task.resume()
+        urlSessionTask = task
     }
 
     /// 画面遷移直前に呼ばれる
@@ -81,3 +71,4 @@ class RepositoryCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
 }
+
