@@ -12,7 +12,10 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
         searchBar.text = "GitHubのリポジトリを検索できるよー"
         searchBar.delegate = self
     }
+}
 
+/// Search Bar 関連関数
+extension SearchRepositoryViewController {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         // ↓こうすれば初期のテキストを消せる
         searchBar.text = ""
@@ -35,7 +38,10 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
         task.resume()
         urlSessionTask = task
     }
+}
 
+/// Table View 関連関数
+extension SearchRepositoryViewController {
     /// 画面遷移直前に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Detail" {
@@ -66,6 +72,7 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
     }
 }
 
+/// カスタムセルクラス
 class RepositoryCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
