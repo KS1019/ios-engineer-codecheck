@@ -4,9 +4,7 @@ class RepositoryDetailViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     
     @IBOutlet weak var titleLabel: UILabel!
-    
     @IBOutlet weak var languageLabel: UILabel!
-    
     @IBOutlet weak var starsLabel: UILabel!
     @IBOutlet weak var watchesLabel: UILabel!
     @IBOutlet weak var forksLabel: UILabel!
@@ -16,11 +14,12 @@ class RepositoryDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        prepareLabels()
+        setLabels()
         setOwnerAvatar()
     }
 
-    func prepareLabels() {
+    /// ラベルを設定する
+    func setLabels() {
         languageLabel.text = repo.language != nil ? "Written in \(repo.language!)" : ""
         starsLabel.text = "\(repo.stargazersCount) stars"
         watchesLabel.text = "\(repo.watchersCount) watchers"
