@@ -11,14 +11,12 @@ class RepositoryDetailViewController: UIViewController {
     @IBOutlet weak var watchesLabel: UILabel!
     @IBOutlet weak var forksLabel: UILabel!
     @IBOutlet weak var issuesLabel: UILabel!
-    
-    var searchRepositoryVC: SearchRepositoryViewController!
-    
+
+    var repo: Repository!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let repo = searchRepositoryVC.repositories[searchRepositoryVC.index]
-        
+
         languageLabel.text = repo.language != nil ? "Written in \(repo.language!)" : ""
         starsLabel.text = "\(repo.stargazersCount) stars"
         watchesLabel.text = "\(repo.watchersCount) watchers"
@@ -29,8 +27,6 @@ class RepositoryDetailViewController: UIViewController {
 
     /// アバター画像を設定する
     func setOwnerAvatar() {
-        let repo = searchRepositoryVC.repositories[searchRepositoryVC.index]
-        
         titleLabel.text = repo.fullName
         
         guard let avatarURL = URL(string: repo.owner.avatarURL) else { return }
