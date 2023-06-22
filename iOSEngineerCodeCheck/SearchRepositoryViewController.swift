@@ -37,9 +37,7 @@ class SearchRepositoryViewController: UITableViewController, UISearchBarDelegate
                       let result = try? decoder.decode(RepoSearchResultItem.self, from: data) else { return }
                 self.repositories = result.items
                 DispatchQueue.main.async {
-                    print("ggggg")
                     self.tableView.reloadData()
-                    print("ffff")
                 }
             }
             // タスクの再開（テーブルビューを更新する）
